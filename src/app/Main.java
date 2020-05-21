@@ -1,12 +1,9 @@
 package app;
 
-import gui.MainFrame;
-
 public class Main {
 
-    public static void main(String[] args) {
-        MainFrame mf = MainFrame.getInstance();
-        mf.setVisible(true);
+    public static void main() {
+        System.out.println("Pocetak");
     }
 
 }
