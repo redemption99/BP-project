@@ -1,6 +1,9 @@
 package resource;
 
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public abstract class DBNodeComposite extends DBNode{
@@ -34,5 +37,55 @@ public abstract class DBNodeComposite extends DBNode{
 
     public DBNode getChildAt(int i) {
         return children.get(i);
+    }
+
+    @Override
+    public void insert(MutableTreeNode child, int index) {
+        this.getChildren().add((DBNode) child);
+    }
+
+    @Override
+    public void remove(int index) {
+        this.getChildren().remove(index);
+    }
+
+    @Override
+    public void remove(MutableTreeNode node) {
+        this.getChildren().remove(node);
+    }
+
+    @Override
+    public void setUserObject(Object object) {
+
+    }
+
+    @Override
+    public void removeFromParent() {
+
+    }
+
+    @Override
+    public void setParent(MutableTreeNode newParent) {
+
+    }
+
+    @Override
+    public int getChildCount() {
+        return this.getChildren().size();
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        return this.getChildren().indexOf(node);
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return false;
+    }
+
+    @Override
+    public Enumeration<? extends TreeNode> children() {
+        return null;
     }
 }

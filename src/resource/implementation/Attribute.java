@@ -4,6 +4,10 @@ import resource.DBNode;
 import resource.DBNodeComposite;
 import resource.enums.AttributeType;
 
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+import java.util.Enumeration;
+
 public class Attribute extends DBNodeComposite {
 
     private AttributeType type;

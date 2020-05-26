@@ -12,12 +12,13 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-    public static MainFrame instance = null;
+    private static MainFrame instance = null;
 
     private JScrollPane scrollPane;
     private Database db;
     private DatabaseTree tree;
     private DatabaseTreeModel treeModel;
+    private JSplitPane splitPane;
 
     public MainFrame() {
         this.db = new DatabaseImplementation(new MSSQLRepository());
@@ -39,12 +40,13 @@ public class MainFrame extends JFrame {
         tree.setModel(treeModel);
         scrollPane.setViewportView(tree);
         scrollPane.setMinimumSize(new Dimension(200, 150));
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, new JPanel());
 
         setTitle("Baze Podataka - Projekat");
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        add(scrollPane);
+        add(splitPane);
     }
 }

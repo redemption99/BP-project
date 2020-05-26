@@ -1,8 +1,9 @@
 package resource;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 
-public abstract class DBNode extends DefaultMutableTreeNode {
+import javax.swing.tree.MutableTreeNode;
+
+public abstract class DBNode implements MutableTreeNode {
 
     private String name;
     private DBNode parent;

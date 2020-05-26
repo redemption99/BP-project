@@ -3,7 +3,9 @@ package resource.implementation;
 import resource.DBNode;
 import resource.DBNodeComposite;
 
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
+import java.util.Enumeration;
 
 public class Entity extends DBNodeComposite {
 
