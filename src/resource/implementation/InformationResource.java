@@ -18,7 +18,6 @@ public class InformationResource extends DBNodeComposite {
         if (child != null && child instanceof Entity) {
             Entity e = (Entity)child;
             this.getChildren().add(e);
-            this.insert(child, this.getChildren().size() - 1);
         }
     }
 
