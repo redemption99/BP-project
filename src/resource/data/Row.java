@@ -24,4 +24,7 @@ public class Row {
         this.fields.remove(fieldName);
     }
 
+    public Map<String, Object> getFields() {
+        return this.fields;
+    }
 }

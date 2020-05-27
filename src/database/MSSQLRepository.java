@@ -25,7 +25,6 @@ public class MSSQLRepository implements Repository{
         conn = DriverManager.getConnection("jdbc:jtds:sqlserver://" + Constants.MSSQL_IP + "/" + Constants.MSSQL_DATABASE,
                                         Constants.MSSQL_USERNAME,
                                         Constants.MSSQL_PASSWORD);
-        System.out.println("Connection successful");
     }
 
     private void closeConnection() {

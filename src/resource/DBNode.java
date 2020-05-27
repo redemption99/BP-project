@@ -9,6 +9,7 @@ public abstract class DBNode implements MutableTreeNode {
     private DBNode parent;
 
     public DBNode(String name, DBNode parent) {
+        super();
         this.name = name;
         this.parent = parent;
     }
