@@ -83,7 +83,6 @@ public class MSSQLRepository implements Repository{
                     }
 
                     while (foreignKeys.next()) {
-                        String fkTableName = foreignKeys.getString("FKTABLE_NAME");
                         String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");
                         String pkTableName = foreignKeys.getString("PKTABLE_NAME");
                         String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");

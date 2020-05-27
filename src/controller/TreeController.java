@@ -22,6 +22,9 @@ public class TreeController implements TreeSelectionListener {
             EntityView ev = new EntityView(entity);
 
             MainFrame.getInstance().getTopTp().addTab(ev);
+
+            MainFrame.getInstance().getBotTp().getTabPane().removeAll();
+
             for (int i = 0; i < entity.getChildCount(); i++) {
                 Attribute a = null;
                 if (entity.getChildAt(i) instanceof Attribute)

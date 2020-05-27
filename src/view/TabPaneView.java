@@ -1,6 +1,8 @@
 package view;
 
 import javax.swing.*;
+
+import gui.QueryToolbar;
 import observer.*;
 
 import java.awt.*;
@@ -8,11 +10,14 @@ import java.awt.*;
 public class TabPaneView extends JPanel implements Subscriber {
 
     private JTabbedPane tabPane;
+    private QueryToolbar toolbar;
 
     public TabPaneView() {
         this.tabPane = new JTabbedPane();
-        setLayout(new GridLayout());
-        add(tabPane);
+        this.toolbar = new QueryToolbar();
+        setLayout(new BorderLayout());
+        add(toolbar, BorderLayout.SOUTH);
+        add(tabPane, BorderLayout.CENTER);
         setVisible(true);
     }
 
@@ -26,6 +31,10 @@ public class TabPaneView extends JPanel implements Subscriber {
 
         tabPane.addTab(ev.getName(), ev);
         tabPane.setSelectedIndex(tabPane.getTabCount()-1);
+    }
+
+    public JTabbedPane getTabPane() {
+        return tabPane;
     }
 
     @Override
