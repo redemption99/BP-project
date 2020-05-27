@@ -12,7 +12,7 @@ public class Attribute extends DBNodeComposite {
 
     private AttributeType type;
     private int length;
-    private Attribute inRelation;
+    private Attribute inRelation = null;
 
     public Attribute(String name, DBNode parent) {
         super(name, parent);

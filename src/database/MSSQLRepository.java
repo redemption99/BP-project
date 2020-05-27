@@ -87,9 +87,11 @@ public class MSSQLRepository implements Repository{
                         String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");
                         String pkTableName = foreignKeys.getString("PKTABLE_NAME");
                         String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
+
                         if (fkColumnName.equals(attribute.toString())) {
                             AttributeConstraint ac = new AttributeConstraint(ConstraintType.FOREIGN_KEY.toString(), attribute, ConstraintType.FOREIGN_KEY);
                             attribute.addChild(ac);
+                            attribute.setInRelation(new Attribute(pkColumnName, new Entity(pkTableName, ir), AttributeType.valueOf(columnType.toUpperCase()), columnSize));
                         }
                     }
 

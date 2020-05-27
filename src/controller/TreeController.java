@@ -1,6 +1,7 @@
 package controller;
 
 import gui.MainFrame;
+import resource.implementation.Attribute;
 import resource.implementation.Entity;
 import view.*;
 
@@ -21,6 +22,14 @@ public class TreeController implements TreeSelectionListener {
             EntityView ev = new EntityView(entity);
 
             MainFrame.getInstance().getTopTp().addTab(ev);
+            for (int i = 0; i < entity.getChildCount(); i++) {
+                Attribute a = null;
+                if (entity.getChildAt(i) instanceof Attribute)
+                    a = (Attribute)entity.getChildAt(i);
+                if (a.getInRelation() != null) {
+                    MainFrame.getInstance().getBotTp().addTab(new EntityView((Entity) a.getInRelation().getParent()));
+                }
+            }
         }
     }
 }
