@@ -1,5 +1,6 @@
 package gui;
 
+import controller.TabChangeListener;
 import database.Database;
 import database.DatabaseImplementation;
 import database.MSSQLRepository;
@@ -50,6 +51,7 @@ public class MainFrame extends JFrame implements Subscriber {
         scrollPane.setMinimumSize(new Dimension(200, 150));
 
         topTp = new TabPaneView();
+        topTp.getTabPane().addChangeListener(new TabChangeListener());
         botTp = new TabPaneView();
 
         splitPaneR = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topTp, botTp);
