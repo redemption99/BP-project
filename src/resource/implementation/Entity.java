@@ -57,7 +57,7 @@ public class Entity extends DBNodeComposite {
 
     @Override
     public void addChild(DBNode child) {
-        if (child instanceof Attribute) {
+        if (child != null && child instanceof Attribute) {
             Attribute a = (Attribute)child;
             this.getChildren().add(a);
         }

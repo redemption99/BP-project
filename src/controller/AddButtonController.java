@@ -18,7 +18,7 @@ public class AddButtonController extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Entity entity = (Entity) ((EntityView) toolbar.getTabPane().getSelectedComponent()).getEntity();
-        new Add(entity);
+        EntityView entityView = (EntityView) toolbar.getTabPane().getSelectedComponent();
+        new Add(entityView);
     }
 }
