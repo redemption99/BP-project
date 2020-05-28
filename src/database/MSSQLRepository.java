@@ -13,6 +13,7 @@ import utils.Constants;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.DoubleToIntFunction;
 
 public class MSSQLRepository implements Repository{
 
@@ -47,7 +48,7 @@ public class MSSQLRepository implements Repository{
             InformationResource ir = new InformationResource("Baza");
 
             String tableType[] = {"TABLE"};
-            ResultSet tables = metaData.getTables(null, "dbo", null, tableType);
+            ResultSet tables = metaData.getTables(conn.getCatalog(), "dbo", null, tableType);
 
             while (tables.next()) {
 
@@ -58,7 +59,7 @@ public class MSSQLRepository implements Repository{
 
                 // System.out.println(tableName);
 
-                ResultSet columns = metaData.getColumns(null, null, tableName, null);
+                ResultSet columns = metaData.getColumns(conn.getCatalog(), null, tableName, null);
 
                 while (columns.next()) {
 
@@ -77,8 +78,9 @@ public class MSSQLRepository implements Repository{
                     while (primaryKeys.next()) {
                         String pkColumnName = primaryKeys.getString("COLUMN_NAME");
                         if (pkColumnName.equals(attribute.toString())) {
-                            AttributeConstraint ac = new AttributeConstraint(ConstraintType.PRIMARY_KEY.toString(), attribute, ConstraintType.PRIMARY_KEY);
+                            AttributeConstraint ac = new AttributeConstraint(pkColumnName, attribute, ConstraintType.PRIMARY_KEY);
                             attribute.addChild(ac);
+                            newTable.addPrimaryKey(ac);
                         }
                     }
 
@@ -88,9 +90,9 @@ public class MSSQLRepository implements Repository{
                         String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
 
                         if (fkColumnName.equals(attribute.toString())) {
-                            AttributeConstraint ac = new AttributeConstraint(ConstraintType.FOREIGN_KEY.toString(), attribute, ConstraintType.FOREIGN_KEY);
+                            AttributeConstraint ac = new AttributeConstraint(pkColumnName, attribute, ConstraintType.FOREIGN_KEY);
                             attribute.addChild(ac);
-                            attribute.setInRelation(new Attribute(pkColumnName, new Entity(pkTableName, ir), AttributeType.valueOf(columnType.toUpperCase()), columnSize));
+                            newTable.addForeignKey(ac);
                         }
                     }
 
@@ -108,6 +110,21 @@ public class MSSQLRepository implements Repository{
                 }
 
             }
+
+            // kreiranje relacija
+
+            for (DBNode i: ir.getChildren())
+                if (i instanceof Entity) {
+                    Entity ie = (Entity) i;
+                    for (DBNode j: ir.getChildren())
+                        if (j instanceof Entity) {
+                            Entity je = (Entity) j;
+                            if (ie.inRelation(je) || je.inRelation(ie)) {
+                                ie.addRelation(je);
+                                je.addRelation(ie);
+                            }
+                        }
+                }
 
             return ir;
 

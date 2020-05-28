@@ -19,7 +19,7 @@ public class AttributeConstraint extends DBNode {
 
     @Override
     public String toString() {
-        return super.toString();
+        return constraintType.toString();
     }
 
     @Override

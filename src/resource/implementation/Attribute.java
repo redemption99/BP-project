@@ -12,7 +12,6 @@ public class Attribute extends DBNodeComposite {
 
     private AttributeType type;
     private int length;
-    private Attribute inRelation = null;
 
     public Attribute(String name, DBNode parent) {
         super(name, parent);
@@ -32,20 +31,12 @@ public class Attribute extends DBNodeComposite {
         }
     }
 
-    public Attribute getInRelation() {
-        return inRelation;
-    }
-
     public AttributeType getType() {
         return type;
     }
 
     public int getLength() {
         return length;
-    }
-
-    public void setInRelation(Attribute inRelation) {
-        this.inRelation = inRelation;
     }
 
     @Override
