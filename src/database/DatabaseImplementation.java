@@ -36,8 +36,8 @@ public class DatabaseImplementation implements Database{
     }
 
     @Override
-    public void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
-        repo.delete(entity, attributeNames, attributeValues);
+    public boolean delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
+        return repo.delete(entity, attributeNames, attributeValues);
     }
 
 }

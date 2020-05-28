@@ -19,7 +19,7 @@ public class QueryToolbar extends JToolBar {
 
         addButton.addActionListener(new AddButtonController(this));
         updateButton.addActionListener(new UpdateButtonController(this));
-        deleteButton.addActionListener(new DeleteButtonController());
+        deleteButton.addActionListener(new DeleteButtonController(this));
 
         add(addButton);
         add(updateButton);

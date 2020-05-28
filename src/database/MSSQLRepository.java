@@ -285,7 +285,7 @@ public class MSSQLRepository implements Repository{
     }
 
     @Override
-    public void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
+    public boolean delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
 
         try {
             this.initConnection();
@@ -312,11 +312,12 @@ public class MSSQLRepository implements Repository{
             System.out.println("Success");
 
         } catch (Exception e) {
-            System.out.println("Neuspesno");
+            return false;
         } finally {
             this.closeConnection();
         }
 
+        return true;
     }
 
     private boolean isNumeric(String num) {

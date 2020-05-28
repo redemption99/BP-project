@@ -19,6 +19,6 @@ public interface Repository {
 
     boolean update(Entity entity, ArrayList<String> newValues, Row row);
 
-    void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues);
+    boolean delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues);
 
 }

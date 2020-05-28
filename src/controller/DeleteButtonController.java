@@ -1,6 +1,8 @@
 package controller;
 
 import gui.MainFrame;
+import gui.Message;
+import gui.QueryToolbar;
 import resource.implementation.Entity;
 import view.EntityView;
 
@@ -11,9 +13,15 @@ import java.util.List;
 
 public class DeleteButtonController extends AbstractAction {
 
+    private QueryToolbar toolbar;
+
+    public DeleteButtonController(QueryToolbar toolbar) {
+        this.toolbar = toolbar;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        EntityView ev = (EntityView)MainFrame.getInstance().getTopTp().getTabPane().getSelectedComponent();
+        EntityView ev = (EntityView) toolbar.getTabPane().getSelectedComponent();
         JTable table = ev.getTable();
         Entity entity = ev.getEntity();
         List<String> pkeysStrings = new ArrayList<>();
@@ -33,7 +41,12 @@ public class DeleteButtonController extends AbstractAction {
             }
         }
 
-        MainFrame.getInstance().getDb().delete(entity, attributeNames, attributeValues);
-        ev.getTableModel().setRows(MainFrame.getInstance().getDb().readDataFromTable(entity.getName()));
+        if (MainFrame.getInstance().getDb().delete(entity, attributeNames, attributeValues)) {
+            new Message("Red je uspesno obrisan.");
+            ev.getTableModel().setRows(MainFrame.getInstance().getDb().readDataFromTable(entity.getName()));
+        }
+        else
+            new Message("Red nije obrisan.");
+
     }
 }
