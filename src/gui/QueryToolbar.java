@@ -2,6 +2,7 @@ package gui;
 
 import controller.AddButtonController;
 import controller.UpdateButtonController;
+import controller.DeleteButtonController;
 import view.TabPaneView;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class QueryToolbar extends JToolBar {
 
         addButton.addActionListener(new AddButtonController(this));
         updateButton.addActionListener(new UpdateButtonController(this));
+        deleteButton.addActionListener(new DeleteButtonController());
 
         add(addButton);
         add(updateButton);

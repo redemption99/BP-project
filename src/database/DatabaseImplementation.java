@@ -35,5 +35,9 @@ public class DatabaseImplementation implements Database{
         return repo.update(entity, newValues, row);
     }
 
+    @Override
+    public void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
+        repo.delete(entity, attributeNames, attributeValues);
+    }
 
 }

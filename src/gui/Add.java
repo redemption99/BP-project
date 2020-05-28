@@ -3,7 +3,6 @@ package gui;
 import resource.enums.AttributeType;
 import resource.implementation.Attribute;
 import resource.implementation.Entity;
-import view.EntityView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,14 +11,13 @@ import java.util.ArrayList;
 public class Add extends JDialog {
 
     Entity entity;
-    EntityView entityView;
+
     JButton button;
 
     ArrayList<JTextField> textFields;
 
-    public Add(EntityView entityView) {
-        this.entityView = entityView;
-        this.entity = entityView.getEntity();
+    public Add(Entity entity) {
+        this.entity = entity;
 
         textFields = new ArrayList<>();
 
@@ -60,7 +58,7 @@ public class Add extends JDialog {
 
             if (MainFrame.getInstance().getDb().insert(entity, newValues)) {
                 new Message("Dodavanje je uspesno izvrseno.");
-                entityView.getTableModel().setRows(MainFrame.getInstance().getDb().readDataFromTable(entity.getName()));
+                // TODO update
             }
             else
                 new Message("Dodavanje nije izvrseno.");
