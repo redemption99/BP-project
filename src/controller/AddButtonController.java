@@ -2,7 +2,6 @@ package controller;
 
 import gui.Add;
 import gui.QueryToolbar;
-import resource.implementation.Entity;
 import view.EntityView;
 
 import javax.swing.*;

@@ -27,4 +27,7 @@ public class TableModel extends DefaultTableModel {
         updateModel();
     }
 
+    public List<Row> getRows() {
+        return rows;
+    }
 }

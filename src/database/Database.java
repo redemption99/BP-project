@@ -14,4 +14,5 @@ public interface Database {
 
     boolean insert(Entity entity, ArrayList<String> values);
 
+    boolean update(Entity entity, ArrayList<String> newValues, Row row);
 }

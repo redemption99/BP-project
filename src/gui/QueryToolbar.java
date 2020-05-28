@@ -1,6 +1,7 @@
 package gui;
 
 import controller.AddButtonController;
+import controller.UpdateButtonController;
 import view.TabPaneView;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class QueryToolbar extends JToolBar {
         setFloatable(false);
 
         addButton.addActionListener(new AddButtonController(this));
+        updateButton.addActionListener(new UpdateButtonController(this));
 
         add(addButton);
         add(updateButton);

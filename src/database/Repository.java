@@ -2,6 +2,7 @@ package database;
 
 import resource.DBNode;
 import resource.data.Row;
+import resource.implementation.AttributeConstraint;
 import resource.implementation.Entity;
 
 import java.util.ArrayList;
@@ -14,4 +15,6 @@ public interface Repository {
     List<Row> get(String from);
 
     boolean insert(Entity entity, ArrayList<String> newValues);
+
+    boolean update(Entity entity, ArrayList<String> newValues, Row row);
 }
