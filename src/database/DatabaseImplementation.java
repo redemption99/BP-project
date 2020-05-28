@@ -40,4 +40,9 @@ public class DatabaseImplementation implements Database{
         return repo.delete(entity, attributeNames, attributeValues);
     }
 
+    @Override
+    public List<Row> filterAndSort(Entity entity, ArrayList<String> selected, ArrayList<String> ascending, ArrayList<String> descending) {
+        return repo.filterAndSort(entity, selected, ascending, descending);
+    }
+
 }

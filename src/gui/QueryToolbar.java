@@ -1,6 +1,7 @@
 package gui;
 
 import controller.AddButtonController;
+import controller.FilterAndSortController;
 import controller.UpdateButtonController;
 import controller.DeleteButtonController;
 import view.TabPaneView;
@@ -12,6 +13,7 @@ public class QueryToolbar extends JToolBar {
     private JButton addButton = new JButton("Add");
     private JButton updateButton = new JButton("Update");
     private JButton deleteButton = new JButton("Delete");
+    private JButton filterSortButton = new JButton("Filter and Sort");
     private JTabbedPane tabPane = null;
 
     public QueryToolbar() {
@@ -20,10 +22,12 @@ public class QueryToolbar extends JToolBar {
         addButton.addActionListener(new AddButtonController(this));
         updateButton.addActionListener(new UpdateButtonController(this));
         deleteButton.addActionListener(new DeleteButtonController(this));
+        filterSortButton.addActionListener(new FilterAndSortController(this));
 
         add(addButton);
         add(updateButton);
         add(deleteButton);
+        add(filterSortButton);
 
         setVisible(false);
     }

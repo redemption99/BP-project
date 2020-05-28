@@ -320,6 +320,59 @@ public class MSSQLRepository implements Repository{
         return true;
     }
 
+    @Override
+    public List<Row> filterAndSort(Entity entity, ArrayList<String> selected, ArrayList<String> ascending, ArrayList<String> descending) {
+        List<Row> returnList = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+
+        for (int i = 0; i < selected.size(); i++) {
+            query.append(selected.get(i));
+            if (i != selected.size() - 1) query.append(", ");
+        }
+        if (selected.size() == 0) query.append("*");
+        query.append(" FROM ").append(entity.getName()).append(" ORDER BY ");
+
+        for (int i = 0; i < ascending.size(); i++) {
+            query.append(ascending.get(i)).append(" ASC");
+            if (i != ascending.size() - 1) query.append(", ");
+        }
+        if (descending.size() != 0) query.append(", ");
+        for (int i = 0; i < descending.size(); i++) {
+            query.append(descending.get(i)).append(" DESC");
+            if (i != descending.size() - 1) query.append(", ");
+        }
+
+        try {
+            this.initConnection();
+
+            PreparedStatement ps = conn.prepareStatement(query.toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Row row = new Row();
+                row.setName(entity.getName());
+
+                ResultSetMetaData rsmd = rs.getMetaData();
+
+                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                    row.addField(rsmd.getColumnName(i), rs.getString(i));
+                }
+                returnList.add(row);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+
+        return returnList;
+    }
+
     private boolean isNumeric(String num) {
         if (num == null) {
             return false;
