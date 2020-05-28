@@ -15,6 +15,7 @@ public class TabPaneView extends JPanel implements Subscriber {
     public TabPaneView() {
         this.tabPane = new JTabbedPane();
         this.toolbar = new QueryToolbar();
+        toolbar.setTabPane(tabPane);
         setLayout(new BorderLayout());
         add(toolbar, BorderLayout.SOUTH);
         add(tabPane, BorderLayout.CENTER);
@@ -22,6 +23,8 @@ public class TabPaneView extends JPanel implements Subscriber {
     }
 
     public void addTab(EntityView ev) {
+
+        toolbar.setVisible(true);
 
         for (int i = 0; i < tabPane.getTabCount(); i++)
             if (ev.getName().equals(tabPane.getComponentAt(i).getName())) {

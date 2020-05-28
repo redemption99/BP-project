@@ -38,4 +38,8 @@ public class EntityView extends JPanel {
     public Entity getEntity() {
         return entity;
     }
+
+    public JTable getTable() {
+        return table;
+    }
 }

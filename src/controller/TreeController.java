@@ -28,15 +28,6 @@ public class TreeController implements TreeSelectionListener {
             for (Entity i : entity.getRelations()) {
                 MainFrame.getInstance().getBotTp().addTab(new EntityView(i));
             }
-
-            /*for (int i = 0; i < entity.getChildCount(); i++) {
-                Attribute a = null;
-                if (entity.getChildAt(i) instanceof Attribute)
-                    a = (Attribute)entity.getChildAt(i);
-                if (a.getInRelation() != null) {
-                    MainFrame.getInstance().getBotTp().addTab(new EntityView((Entity) a.getInRelation().getParent()));
-                }
-            }*/
         }
     }
 }

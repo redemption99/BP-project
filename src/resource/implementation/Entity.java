@@ -42,7 +42,7 @@ public class Entity extends DBNodeComposite {
     }
 
     public boolean inRelation(Entity e) {
-        for (AttributeConstraint i: foreignKeys)
+        for (AttributeConstraint i: getForeignKeys())
             for (AttributeConstraint j: e.getPrimaryKeys())
                 // drugi uslov je za slucaj kada je jedan atribut istovremeno i foreign key i primary key
                 if (i.getName().equals(j.getName()) && i.getParent() != j.getParent())
@@ -57,7 +57,7 @@ public class Entity extends DBNodeComposite {
 
     @Override
     public void addChild(DBNode child) {
-        if (child != null && child instanceof Attribute) {
+        if (child instanceof Attribute) {
             Attribute a = (Attribute)child;
             this.getChildren().add(a);
         }

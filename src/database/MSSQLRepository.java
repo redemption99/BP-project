@@ -171,4 +171,51 @@ public class MSSQLRepository implements Repository{
 
         return rows;
     }
+
+    @Override
+    public boolean insert(Entity entity, ArrayList<String> newValues) {
+
+        try {
+            this.initConnection();
+
+            StringBuilder query = new StringBuilder();
+            query.append("INSERT INTO ").append(entity.getName()).append(" VALUES (");
+
+            for (int i = 0; i < newValues.size(); i++) {
+                if (i > 0)
+                    query.append(", ");
+
+                if (newValues.get(i).equals("")) {
+                    query.append("NULL");
+                    continue;
+                }
+
+                AttributeType at =((Attribute) entity.getChildren().get(i)).getType();
+
+                if (at == AttributeType.CHAR || at == AttributeType.VARCHAR || at == AttributeType.NVARCHAR || at == AttributeType.DATE || at == AttributeType.DATETIME) {
+                    query.append("'").append(newValues.get(i)).append("'");
+                    continue;
+                }
+
+                query.append(newValues.get(i));
+            }
+
+            query.append(")");
+
+            System.out.println(query.toString());
+
+            PreparedStatement ps = conn.prepareStatement(query.toString());
+            ps.execute();
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return  false;
+        } finally {
+            this.closeConnection();
+        }
+
+        return true;
+    }
+
+
 }

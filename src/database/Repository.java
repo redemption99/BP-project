@@ -2,12 +2,16 @@ package database;
 
 import resource.DBNode;
 import resource.data.Row;
+import resource.implementation.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Repository {
 
     DBNode getSchema();
+    
     List<Row> get(String from);
 
+    boolean insert(Entity entity, ArrayList<String> newValues);
 }
