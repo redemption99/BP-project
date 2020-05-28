@@ -74,6 +74,5 @@ public class Update extends JDialog {
 
         add(button);
 
-
     }
 }

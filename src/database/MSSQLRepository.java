@@ -222,6 +222,68 @@ public class MSSQLRepository implements Repository{
 
         try {
             this.initConnection();
+
+            ArrayList<AttributeConstraint> primaryKeys = entity.getPrimaryKeys();
+
+            StringBuilder query = new StringBuilder();
+            query.append("UPDATE ").append(entity.getName()).append(" SET ");
+
+            int first = 0;
+
+            for (int i = 0; i < newValues.size(); i++) {
+                if (newValues.get(i).equals("")) {
+                    continue;
+                }
+                if (first > 0)
+                    query.append(", ");
+                first++;
+
+                query.append(((Attribute) entity.getChildren().get(i)).getName()).append(" = ");
+
+                AttributeType at =((Attribute) entity.getChildren().get(i)).getType();
+
+                if (at == AttributeType.CHAR || at == AttributeType.VARCHAR || at == AttributeType.NVARCHAR || at == AttributeType.DATE || at == AttributeType.DATETIME) {
+                    query.append("'").append(newValues.get(i)).append("'");
+                    continue;
+                }
+
+                query.append(newValues.get(i));
+            }
+
+            query.append(" WHERE ");
+
+            first = 0;
+
+            for (AttributeConstraint ac:primaryKeys) {
+                if (first > 0)
+                    query.append("AND ");
+                first++;
+                query.append(ac.getName()).append(" = ");
+                AttributeType at = ((Attribute) ac.getParent()).getType();
+
+                if (at == AttributeType.CHAR || at == AttributeType.VARCHAR || at == AttributeType.NVARCHAR || at == AttributeType.DATE || at == AttributeType.DATETIME) {
+                    query.append("'").append(row.getFields().get(ac.getName())).append("'");
+                    continue;
+                }
+
+                query.append(row.getFields().get(ac.getName()));
+            }
+
+            System.out.println(query.toString());
+
+            PreparedStatement ps = conn.prepareStatement(query.toString());
+            ps.execute();
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return  false;
+        } finally {
+            this.closeConnection();
+        }
+
+        return true;
+    }
+
     @Override
     public void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
 
@@ -254,5 +316,19 @@ public class MSSQLRepository implements Repository{
         } finally {
             this.closeConnection();
         }
+
+    }
+
+    private boolean isNumeric(String num) {
+        if (num == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(num);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 
 }
