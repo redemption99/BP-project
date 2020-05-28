@@ -2,6 +2,7 @@ package database;
 
 import resource.DBNode;
 import resource.data.Row;
+import resource.implementation.Attribute;
 import resource.implementation.Entity;
 
 import java.util.ArrayList;
@@ -29,4 +30,10 @@ public class DatabaseImplementation implements Database{
     public boolean insert(Entity entity, ArrayList<String> values) {
         return repo.insert(entity, values);
     }
+
+    @Override
+    public void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
+        repo.delete(entity, attributeNames, attributeValues);
+    }
+
 }

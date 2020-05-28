@@ -217,5 +217,50 @@ public class MSSQLRepository implements Repository{
         return true;
     }
 
+    @Override
+    public void delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
 
+        try {
+            this.initConnection();
+
+            StringBuilder query = new StringBuilder();
+            query.append("DELETE FROM ").append(entity.getName()).append(" WHERE ");
+
+            for (int i = 0; i < attributeNames.size(); i++) {
+
+                if (isNumeric(attributeValues.get(i))) {
+                    query.append(attributeNames.get(i)).append("=").append(attributeValues.get(i));
+                } else {
+                    query.append(attributeNames.get(i)).append(" LIKE '").append(attributeValues.get(i)).append("'");
+                }
+
+                if (i != attributeNames.size() - 1) {
+                    query.append(" AND ");
+                }
+            }
+
+            System.out.println(query.toString());
+            PreparedStatement ps = conn.prepareStatement(query.toString());
+            ps.execute();
+            System.out.println("Success");
+
+        } catch (Exception e) {
+            System.out.println("Neuspesno");
+        } finally {
+            this.closeConnection();
+        }
+
+    }
+
+    private boolean isNumeric(String num) {
+        if (num == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(num);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 }
