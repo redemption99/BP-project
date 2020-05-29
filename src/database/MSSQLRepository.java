@@ -338,7 +338,7 @@ public class MSSQLRepository implements Repository{
             query.append(ascending.get(i)).append(" ASC");
             if (i != ascending.size() - 1) query.append(", ");
         }
-        if (descending.size() != 0) query.append(", ");
+        if (descending.size() != 0 && ascending.size() != 0) query.append(", ");
         for (int i = 0; i < descending.size(); i++) {
             query.append(descending.get(i)).append(" DESC");
             if (i != descending.size() - 1) query.append(", ");
@@ -362,6 +362,57 @@ public class MSSQLRepository implements Repository{
                 }
                 returnList.add(row);
 
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+
+        return returnList;
+    }
+
+    @Override
+    public List<Row> search(Entity entity, ArrayList<String> selected, ArrayList<String> operators, ArrayList<String> whereAttributes) {
+        List<Row> returnList = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+
+        for (int i = 0; i < selected.size(); i++) {
+            query.append(selected.get(i));
+            if (i != selected.size() - 1)
+                query.append(", ");
+        }
+
+        query.append(" FROM ").append(entity.getName()).append(" WHERE ");
+
+        for (int i = 0; i < operators.size(); i++) {
+            query.append(whereAttributes.get(i)).append(" ").append(operators.get(i)).append(" ");
+        }
+
+        query.append(whereAttributes.get(whereAttributes.size()-1));
+
+        System.out.println(query.toString());
+
+        try {
+            this.initConnection();
+
+            PreparedStatement ps = conn.prepareStatement(query.toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Row row = new Row();
+                row.setName(entity.getName());
+
+                ResultSetMetaData rsmd = rs.getMetaData();
+
+                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                    row.addField(rsmd.getColumnName(i), rs.getString(i));
+                }
+                returnList.add(row);
             }
 
         } catch (Exception e) {

@@ -39,10 +39,13 @@ public class FilterAndSort extends JDialog {
         this.attributes = new JList(listModel);
         selectedElements.setWrapStyleWord(true);
         selectedElements.setLineWrap(true);
+        selectedElements.setEditable(false);
         ascedningElements.setWrapStyleWord(true);
         ascedningElements.setLineWrap(true);
+        ascedningElements.setEditable(false);
         descendingElements.setWrapStyleWord(true);
         descendingElements.setLineWrap(true);
+        descendingElements.setEditable(false);
 
         setMinimumSize(new Dimension(700, 570));
         setMaximumSize(new Dimension(700, 570));

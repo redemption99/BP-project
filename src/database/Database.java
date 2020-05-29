@@ -20,4 +20,6 @@ public interface Database {
     boolean delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues);
 
     List<Row> filterAndSort(Entity entity, ArrayList<String> selected, ArrayList<String> ascending, ArrayList<String> descending);
+
+    List<Row> search(Entity entity, ArrayList<String> selected, ArrayList<String> operators, ArrayList<String> whereAttributes);
 }

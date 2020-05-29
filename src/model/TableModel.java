@@ -1,5 +1,6 @@
 package model;
 
+import gui.Message;
 import resource.data.Row;
 
 import javax.swing.table.DefaultTableModel;

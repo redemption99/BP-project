@@ -45,4 +45,10 @@ public class DatabaseImplementation implements Database{
         return repo.filterAndSort(entity, selected, ascending, descending);
     }
 
+    @Override
+    public List<Row> search(Entity entity, ArrayList<String> selected, ArrayList<String> operators, ArrayList<String> whereAttributes) {
+        return repo.search(entity, selected, operators, whereAttributes);
+    }
+
+
 }
