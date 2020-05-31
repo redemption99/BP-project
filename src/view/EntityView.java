@@ -1,6 +1,8 @@
 package view;
 
 import model.TableModel;
+import observer.Notification;
+import observer.Subscriber;
 import resource.implementation.Entity;
 import gui.MainFrame;
 

@@ -14,12 +14,13 @@ import java.util.List;
 public class Search extends JDialog {
 
     private JList attributes;
-    private JLabel selected = new JLabel();
+    private JLabel selected = new JLabel("All columns are selected by default.");
     private JComboBox attributesCombo;
     private JComboBox operatorBox = new JComboBox();
     private JTextField value = new JTextField();
     private JButton andButton = new JButton("AND");
     private JButton orButton = new JButton("OR");
+    private JButton finishButton = new JButton("Finish");
     private JTextArea finalQuery = new JTextArea();
     private JButton searchButton = new JButton("Search");
     private JButton selectButton = new JButton("Select");
@@ -32,6 +33,7 @@ public class Search extends JDialog {
     private Entity entity;
 
     private String[] operators = {">", "<", ">=", "<=", "="};
+    private String[] stringOperators = {"STARTS WITH", "ENDS WITH", "CONTAINS", "EQUALS"};
 
     public Search(EntityView entityView) {
         this.entityView = entityView;
@@ -52,7 +54,9 @@ public class Search extends JDialog {
 
             if (aType == AttributeType.CHAR || aType == AttributeType.VARCHAR || aType == AttributeType.NVARCHAR) {
                 operatorBox.removeAllItems();
-                operatorBox.addItem("LIKE");
+                for (int i = 0; i < stringOperators.length; i++) {
+                    operatorBox.addItem(stringOperators[i]);
+                }
             } else if (aType == AttributeType.INT || aType == AttributeType.NUMERIC || aType == AttributeType.FLOAT) {
                 operatorBox.removeAllItems();
                 for (int i = 0; i < operators.length; i++) {
@@ -78,7 +82,7 @@ public class Search extends JDialog {
                         new Message("The value must be a number!");
                     }
                 } else {
-                    String toAdd = attributesCombo.getSelectedItem().toString() + " " + operatorBox.getSelectedItem() + " '" + value.getText() + "'";
+                    String toAdd = attributesCombo.getSelectedItem().toString() + " LIKE"  + " '" + operatorParse(value.getText()) + "'";
                     whereAttributes.add(toAdd);
                     operatorList.add("AND");
                     finalQuery.setText(finalQuery.getText() + toAdd + " AND ");
@@ -106,7 +110,7 @@ public class Search extends JDialog {
                         new Message("The value must be a number!");
                     }
                 } else {
-                    String toAdd = attributesCombo.getSelectedItem().toString() + " " + operatorBox.getSelectedItem() + " '" + value.getText() + "'";
+                    String toAdd = attributesCombo.getSelectedItem().toString() + " LIKE"  + " '" + operatorParse(value.getText()) + "'";
                     whereAttributes.add(toAdd);
                     operatorList.add("OR");
                     finalQuery.setText(finalQuery.getText() + toAdd + " OR ");
@@ -122,6 +126,7 @@ public class Search extends JDialog {
         finalQuery.setWrapStyleWord(true);
 
         selectButton.addActionListener(e -> {
+            if (selected.getText().startsWith("All columns")) selected.setText("");
             if (attributes.getSelectedValue() != null && !selectedAttributes.contains(attributes.getSelectedValue().toString())) {
                 if (selectedAttributes.size() != 0)
                     selected.setText(selected.getText() + ", " + attributes.getSelectedValue().toString());
@@ -132,6 +137,15 @@ public class Search extends JDialog {
         });
 
         searchButton.addActionListener(e -> {
+            if (selectedAttributes.size() == 0) selectedAttributes.add("*");
+            if (MainFrame.getInstance().getDb().search(entity, selectedAttributes, operatorList, whereAttributes).size() != 0)
+                entityView.getTableModel().setRows(MainFrame.getInstance().getDb().search(entity, selectedAttributes, operatorList, whereAttributes));
+            else
+                new Message("NO DATA FOUND");
+            dispose();
+        });
+
+        finishButton.addActionListener(e -> {
             if (!value.getText().equals("")) {
 
                 Attribute a = (Attribute)attributesCombo.getSelectedItem();
@@ -145,26 +159,20 @@ public class Search extends JDialog {
                         value.setText("");
                     } else {
                         new Message("The value must be a number!");
-                        return;
                     }
                 } else {
-                    String toAdd = attributesCombo.getSelectedItem().toString() + " " + operatorBox.getSelectedItem() + " '" + value.getText() + "'";
+                    String toAdd = attributesCombo.getSelectedItem().toString() + " LIKE"  + " '" + operatorParse(value.getText()) + "'";
                     whereAttributes.add(toAdd);
                     finalQuery.setText(finalQuery.getText() + toAdd);
                     value.setText("");
                 }
 
+                andButton.setEnabled(false);
+                orButton.setEnabled(false);
+
             } else {
                 new Message("Add a value to your search");
-                return;
             }
-
-            if (selectedAttributes.size() == 0) selectedAttributes.add("*");
-            if (MainFrame.getInstance().getDb().search(entity, selectedAttributes, operatorList, whereAttributes).size() != 0)
-                entityView.getTableModel().setRows(MainFrame.getInstance().getDb().search(entity, selectedAttributes, operatorList, whereAttributes));
-            else
-                new Message("NO DATA FOUND");
-            dispose();
         });
 
         setMinimumSize(new Dimension(800, 400));
@@ -176,8 +184,9 @@ public class Search extends JDialog {
         attributesCombo.setBounds (105, 165, 200, 25);
         operatorBox.setBounds (315, 165, 105, 25);
         value.setBounds (430, 165, 200, 25);
-        andButton.setBounds (250, 205, 100, 25);
-        orButton.setBounds (355, 205, 100, 25);
+        andButton.setBounds (250, 195, 100, 25);
+        orButton.setBounds (355, 195, 100, 25);
+        finishButton.setBounds (300,222,100, 25);
         finalQuery.setBounds (25, 250, 700, 55);
         searchButton.setBounds (275, 320, 145, 40);
         selectButton.setBounds (640, 50, 100, 25);
@@ -189,12 +198,26 @@ public class Search extends JDialog {
         add (value);
         add (andButton);
         add (orButton);
+        add (finishButton);
         add (finalQuery);
         add (searchButton);
         add (selectButton);
 
         setVisible(true);
 
+    }
+
+    private String operatorParse(String value) {
+        StringBuilder parsed = new StringBuilder();
+
+        String operator = operatorBox.getSelectedItem().toString();
+
+        if (operator.equals("STARTS WITH")) parsed.append(value).append("%");
+        else if (operator.equals("ENDS WITH")) parsed.append("%").append(value);
+        else if (operator.equals("CONTAINS")) parsed.append("%").append(value).append("%");
+        else if (operator.equals("EQUALS")) parsed.append(value);
+
+        return parsed.toString();
     }
 
     private boolean isNumeric(String num) {

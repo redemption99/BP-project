@@ -50,5 +50,8 @@ public class DatabaseImplementation implements Database{
         return repo.search(entity, selected, operators, whereAttributes);
     }
 
-
+    @Override
+    public List<Row> report(Entity entity, boolean flag, String reportColumn, List<String> groupByColumns) {
+        return repo.report(entity, flag, reportColumn, groupByColumns);
+    }
 }

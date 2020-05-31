@@ -12,7 +12,7 @@ public class TableModel extends DefaultTableModel {
 
     private void updateModel(){
 
-        int columnCount = rows.get(1).getFields().keySet().size();
+        int columnCount = rows.get(0).getFields().keySet().size();
 
         Vector columnVector = DefaultTableModel.convertToVector(rows.get(0).getFields().keySet().toArray());
         Vector dataVector = new Vector(columnCount);

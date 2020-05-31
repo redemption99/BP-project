@@ -24,4 +24,6 @@ public interface Repository {
     List<Row> filterAndSort(Entity entity, ArrayList<String> selected, ArrayList<String> ascending, ArrayList<String> descending);
 
     List<Row> search(Entity entity, ArrayList<String> selected, ArrayList<String> operators, ArrayList<String> whereAttributes);
+
+    List<Row> report(Entity entity, boolean flag, String reportColumn, List<String> groupByColumns);
 }

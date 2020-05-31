@@ -12,6 +12,7 @@ public class QueryToolbar extends JToolBar {
     private JButton deleteButton = new JButton("Delete");
     private JButton filterSortButton = new JButton("Filter and Sort");
     private JButton searchButton = new JButton("Search");
+    private JButton reportButton = new JButton("Report");
     private JTabbedPane tabPane = null;
 
     public QueryToolbar() {
@@ -22,12 +23,14 @@ public class QueryToolbar extends JToolBar {
         deleteButton.addActionListener(new DeleteButtonController(this));
         filterSortButton.addActionListener(new FilterAndSortController(this));
         searchButton.addActionListener(new SearchController(this));
+        reportButton.addActionListener(new ReportButtonController(this));
 
         add(addButton);
         add(updateButton);
         add(deleteButton);
         add(filterSortButton);
         add(searchButton);
+        add(reportButton);
 
         setVisible(false);
     }
