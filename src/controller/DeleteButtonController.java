@@ -34,9 +34,9 @@ public class DeleteButtonController extends AbstractAction {
 
         for (int j = 0; j < table.getColumnCount(); j++) {
             if (pkeysStrings.contains(table.getColumnName(j))) {
-                System.out.println(table.getColumnName(j));
+                //System.out.println(table.getColumnName(j));
                 attributeNames.add(table.getColumnName(j));
-                System.out.println(table.getValueAt(table.getSelectedRow(), j).toString());
+                //System.out.println(table.getValueAt(table.getSelectedRow(), j).toString());
                 attributeValues.add(table.getValueAt(table.getSelectedRow(), j).toString());
             }
         }

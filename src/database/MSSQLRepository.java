@@ -12,8 +12,7 @@ import resource.implementation.InformationResource;
 import utils.Constants;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MSSQLRepository implements Repository{
 
@@ -129,7 +128,7 @@ public class MSSQLRepository implements Repository{
             return ir;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             this.closeConnection();
         }
@@ -164,7 +163,7 @@ public class MSSQLRepository implements Repository{
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             this.closeConnection();
         }
@@ -309,7 +308,7 @@ public class MSSQLRepository implements Repository{
             System.out.println(query.toString());
             PreparedStatement ps = conn.prepareStatement(query.toString());
             ps.execute();
-            System.out.println("Success");
+            // System.out.println("Success");
 
         } catch (Exception e) {
             return false;
@@ -365,7 +364,7 @@ public class MSSQLRepository implements Repository{
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             this.closeConnection();
         }
@@ -416,7 +415,7 @@ public class MSSQLRepository implements Repository{
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             this.closeConnection();
         }
@@ -464,7 +463,7 @@ public class MSSQLRepository implements Repository{
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             this.closeConnection();
         }
@@ -482,6 +481,97 @@ public class MSSQLRepository implements Repository{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<Row> inRelation(Entity topEntity, Entity botEntity, Row selectedRow) {
+
+        List<Row> ret = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT * FROM ").append(botEntity.getName()).append(" WHERE ");
+
+        ArrayList<AttributeConstraint> primaryKeys = topEntity.getForeignKeys();
+        ArrayList<AttributeConstraint> foreignKeys = botEntity.getPrimaryKeys();
+
+        int first = 0;
+
+        for (var i : primaryKeys)
+            for (var j: foreignKeys)
+            {
+                if (i.getName().equals(j.getName()))
+                {
+                    if (first > 0)
+                        query.append(" OR ");
+                    first++;
+
+                    query.append(j.getParent().toString()).append("=");
+
+                    AttributeType at = ((Attribute) i.getParent()).getType();
+
+                    if (at == AttributeType.CHAR || at == AttributeType.VARCHAR || at == AttributeType.NVARCHAR || at == AttributeType.DATE || at == AttributeType.DATETIME) {
+                        query.append("'").append(selectedRow.getFields().get(i.getName())).append("'");
+                        continue;
+                    }
+
+                    query.append(selectedRow.getFields().get(i.getName()));
+                }
+            }
+
+        primaryKeys = topEntity.getPrimaryKeys();
+        foreignKeys = botEntity.getForeignKeys();
+
+        for (var i : primaryKeys)
+            for (var j: foreignKeys)
+            {
+                if (i.getName().equals(j.getName()))
+                {
+                    if (first > 0)
+                        query.append(" OR ");
+                    first++;
+
+                    query.append(j.getParent().toString()).append("=");
+
+                    AttributeType at = ((Attribute) i.getParent()).getType();
+
+                    if (at == AttributeType.CHAR || at == AttributeType.VARCHAR || at == AttributeType.NVARCHAR || at == AttributeType.DATE || at == AttributeType.DATETIME) {
+                        query.append("'").append(selectedRow.getFields().get(i.getName())).append("'");
+                        continue;
+                    }
+
+                    query.append(selectedRow.getFields().get(i.getName()));
+                }
+            }
+
+        System.out.println(query.toString());
+
+        try {
+            this.initConnection();
+
+            PreparedStatement ps = conn.prepareStatement(query.toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Row row = new Row();
+
+                row.setName(botEntity.getName());
+
+                ResultSetMetaData rsmd = rs.getMetaData();
+                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                    row.addField(rsmd.getColumnName(i), rs.getString(i));
+                }
+                ret.add(row);
+            }
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+
+        return ret;
     }
 
 }

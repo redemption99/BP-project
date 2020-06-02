@@ -26,4 +26,6 @@ public interface Repository {
     List<Row> search(Entity entity, ArrayList<String> selected, ArrayList<String> operators, ArrayList<String> whereAttributes);
 
     List<Row> report(Entity entity, boolean flag, String reportColumn, List<String> groupByColumns);
+
+    List<Row> inRelation(Entity topEntity, Entity botEntity, Row selectedRow);
 }

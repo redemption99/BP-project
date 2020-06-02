@@ -54,4 +54,9 @@ public class DatabaseImplementation implements Database{
     public List<Row> report(Entity entity, boolean flag, String reportColumn, List<String> groupByColumns) {
         return repo.report(entity, flag, reportColumn, groupByColumns);
     }
+
+    @Override
+    public List<Row> inRelation(Entity topEntity, Entity botEntity, Row selectedRow) {
+        return repo.inRelation(topEntity, botEntity, selectedRow);
+    }
 }
