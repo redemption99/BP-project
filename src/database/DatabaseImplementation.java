@@ -1,6 +1,5 @@
 package database;
 
-import observer.Publisher;
 import observer.Subscriber;
 import resource.DBNode;
 import resource.data.Row;
@@ -9,9 +8,11 @@ import resource.implementation.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseImplementation implements Database, Publisher {
+public class DatabaseImplementation implements Database {
 
     private Repository repo;
+
+    private List<Subscriber> subscribers = new ArrayList<>();
 
     public DatabaseImplementation(Repository repo) {
         this.repo = repo;
@@ -29,17 +30,23 @@ public class DatabaseImplementation implements Database, Publisher {
 
     @Override
     public boolean insert(Entity entity, ArrayList<String> values) {
-        return repo.insert(entity, values);
+        var ret = repo.insert(entity, values);
+        notifySubscribers(entity);
+        return ret;
     }
 
     @Override
     public boolean update(Entity entity, ArrayList<String> newValues, Row row) {
-        return repo.update(entity, newValues, row);
+        var ret = repo.update(entity, newValues, row);
+        notifySubscribers(entity);
+        return ret;
     }
 
     @Override
     public boolean delete(Entity entity, ArrayList<String> attributeNames, ArrayList<String> attributeValues) {
-        return repo.delete(entity, attributeNames, attributeValues);
+        var ret = repo.delete(entity, attributeNames, attributeValues);
+        notifySubscribers(entity);
+        return ret;
     }
 
     @Override
@@ -64,18 +71,23 @@ public class DatabaseImplementation implements Database, Publisher {
 
     @Override
     public void addSubscriber(Subscriber sub) {
-        repo.addSubscriber(sub);
+        if (!this.subscribers.contains(sub))
+            this.subscribers.add(sub);
     }
 
     @Override
     public void removeSubscriber(Subscriber sub) {
-        repo.removeSubscriber(sub);
+        if (this.subscribers.contains(sub))
+            this.subscribers.remove(sub);
     }
 
     @Override
     public void notifySubscribers(Entity entity) {
-        repo.notifySubscribers(entity);
+        if (subscribers.size() != 0) {
+            for (int i = 0; i < subscribers.size(); i++) {
+                subscribers.get(i).update(entity);
+            }
+        }
     }
-
 
 }

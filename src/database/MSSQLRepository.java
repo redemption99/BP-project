@@ -18,7 +18,6 @@ import java.util.*;
 public class MSSQLRepository implements Repository{
 
     private Connection conn;
-    private List<Subscriber> subscribers = new ArrayList<>();
 
     public MSSQLRepository() {}
 
@@ -214,7 +213,6 @@ public class MSSQLRepository implements Repository{
         } finally {
             this.closeConnection();
         }
-        notifySubscribers(entity);
         return true;
     }
 
@@ -282,7 +280,6 @@ public class MSSQLRepository implements Repository{
             this.closeConnection();
         }
 
-        notifySubscribers(entity);
         return true;
     }
 
@@ -319,7 +316,6 @@ public class MSSQLRepository implements Repository{
             this.closeConnection();
         }
 
-        notifySubscribers(entity);
         return true;
     }
 
@@ -576,27 +572,6 @@ public class MSSQLRepository implements Repository{
         }
 
         return ret;
-    }
-
-    @Override
-    public void addSubscriber(Subscriber sub) {
-        if (!this.subscribers.contains(sub))
-            this.subscribers.add(sub);
-    }
-
-    @Override
-    public void removeSubscriber(Subscriber sub) {
-        if (this.subscribers.contains(sub))
-            this.subscribers.remove(sub);
-    }
-
-    @Override
-    public void notifySubscribers(Entity entity) {
-        if (subscribers.size() != 0) {
-            for (int i = 0; i < subscribers.size(); i++) {
-                subscribers.get(i).update(entity);
-            }
-        }
     }
 
 }
