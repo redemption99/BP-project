@@ -61,7 +61,8 @@ public class Add extends JDialog {
 
             if (MainFrame.getInstance().getDb().insert(entity, newValues)) {
                 new Message("Dodavanje je uspesno izvrseno.");
-                entityView.getTableModel().setRows(MainFrame.getInstance().getDb().readDataFromTable(entity.getName()));
+                // entityView.getTableModel().setRows(MainFrame.getInstance().getDb().readDataFromTable(entity.getName()));
+                // MainFrame.getInstance().getDb().notifySubscribers(null);
             }
             else
                 new Message("Dodavanje nije izvrseno.");
@@ -72,6 +73,6 @@ public class Add extends JDialog {
 
         add(button);
 
-
+        validate();
     }
 }

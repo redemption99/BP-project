@@ -1,9 +1,8 @@
 package database;
 
+import observer.Subscriber;
 import resource.DBNode;
 import resource.data.Row;
-import resource.implementation.AttributeConstraint;
-import resource.implementation.Attribute;
 import resource.implementation.Entity;
 
 import java.util.ArrayList;
@@ -28,4 +27,8 @@ public interface Repository {
     List<Row> report(Entity entity, boolean flag, String reportColumn, List<String> groupByColumns);
 
     List<Row> inRelation(Entity topEntity, Entity botEntity, Row selectedRow);
+
+    void addSubscriber(Subscriber sub);
+    void removeSubscriber(Subscriber sub);
+    void notifySubscribers(Entity entity);
 }

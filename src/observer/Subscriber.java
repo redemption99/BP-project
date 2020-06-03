@@ -1,5 +1,7 @@
 package observer;
 
+import resource.implementation.Entity;
+
 public interface Subscriber {
-    void update(Notification notification);
+    void update(Entity entity);
 }

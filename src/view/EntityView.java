@@ -1,8 +1,6 @@
 package view;
 
-import app.Main;
 import model.TableModel;
-import observer.Notification;
 import observer.Subscriber;
 import resource.data.Row;
 import resource.implementation.Entity;
@@ -12,10 +10,9 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
 import java.util.List;
 
-public class EntityView extends JPanel {
+public class EntityView extends JPanel implements Subscriber{
 
     // EntityView predstavlja jedan tab u tabbedpaneu
 
@@ -27,6 +24,7 @@ public class EntityView extends JPanel {
     public EntityView(Entity entity) {
 
         this.entity = entity;
+        MainFrame.getInstance().getDb().addSubscriber(this);
 
         table = new JTable();
         tableModel = new TableModel();
@@ -90,5 +88,13 @@ public class EntityView extends JPanel {
 
     public TableModel getTableModel() {
         return tableModel;
+    }
+
+    @Override
+    public void update(Entity entity) {
+        if (this.getEntity().getName().equals(entity.getName())) {
+            List<Row> list = MainFrame.getInstance().getDb().readDataFromTable(entity.getName());
+            tableModel.setRows(list);
+        }
     }
 }

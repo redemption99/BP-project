@@ -7,7 +7,7 @@ import observer.*;
 
 import java.awt.*;
 
-public class TabPaneView extends JPanel implements Subscriber {
+public class TabPaneView extends JPanel {
 
     private JTabbedPane tabPane;
     private QueryToolbar toolbar;
@@ -38,10 +38,5 @@ public class TabPaneView extends JPanel implements Subscriber {
 
     public JTabbedPane getTabPane() {
         return tabPane;
-    }
-
-    @Override
-    public void update(Notification notification) {
-
     }
 }

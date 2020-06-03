@@ -1,5 +1,7 @@
 package database;
 
+import observer.Publisher;
+import observer.Subscriber;
 import resource.DBNode;
 import resource.data.Row;
 import resource.implementation.Entity;
@@ -7,7 +9,7 @@ import resource.implementation.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseImplementation implements Database{
+public class DatabaseImplementation implements Database, Publisher {
 
     private Repository repo;
 
@@ -59,4 +61,21 @@ public class DatabaseImplementation implements Database{
     public List<Row> inRelation(Entity topEntity, Entity botEntity, Row selectedRow) {
         return repo.inRelation(topEntity, botEntity, selectedRow);
     }
+
+    @Override
+    public void addSubscriber(Subscriber sub) {
+        repo.addSubscriber(sub);
+    }
+
+    @Override
+    public void removeSubscriber(Subscriber sub) {
+        repo.removeSubscriber(sub);
+    }
+
+    @Override
+    public void notifySubscribers(Entity entity) {
+        repo.notifySubscribers(entity);
+    }
+
+
 }

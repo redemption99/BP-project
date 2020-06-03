@@ -4,19 +4,14 @@ import controller.TabChangeListener;
 import database.Database;
 import database.DatabaseImplementation;
 import database.MSSQLRepository;
-import database.Repository;
-import observer.Notification;
-import observer.Subscriber;
-import resource.implementation.InformationResource;
 import tree.DatabaseTree;
 import tree.DatabaseTreeModel;
 import view.*;
 
-import javax.management.NotificationFilter;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainFrame extends JFrame implements Subscriber {
+public class MainFrame extends JFrame {
 
     private static MainFrame instance = null;
 
@@ -92,8 +87,4 @@ public class MainFrame extends JFrame implements Subscriber {
         this.botTp = botTp;
     }
 
-    @Override
-    public void update(Notification notification) {
-        System.out.println(notification.getCode());
-    }
 }
